@@ -6,7 +6,7 @@ import java.nio.file.Paths;
 
 public class LexScanner {
 	
-	private char[] 	content;
+	private char[] 	content = new char[100];
 	private int 	estado;
 	private int		posicao;
 	
