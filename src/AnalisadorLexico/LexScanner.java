@@ -4,6 +4,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import br.com.professorisidro.compiler.exceptions.IsiLexicalException;
+
 public class LexScanner {
 	
 	private char[] 	content;
@@ -36,28 +38,35 @@ public class LexScanner {
 		if (isEOF()) {
 			return null;
 		}
+		
 		estado = 0;
 		while (true) {
 			currentChar = nextChar();
 			
+			
 			switch(estado) {
 			case 0:
+												
 				if(isChar(currentChar)) {
 					term += currentChar;
 					estado = 1;
 					
 				}
 				else if (isDigit(currentChar)) {
-					estado = 3;
+					estado = 2;
 					term += currentChar;
 				}
+
 				else if (isSpace(currentChar)) {
 					estado = 0;
 					
 				}
-				else if(isOperator(currentChar)) {
-					estado = 5;
-					
+				else if (isOperator(currentChar)) {
+					term += currentChar;
+					token = new Token();
+					token.setType(Token.TK_OPERATOR);
+					token.setText(term);
+					return token;
 				}
 				else {
 					throw new LexException("Unrecognized SYMBOL - SÍMBOLO não reconhecido");
@@ -68,34 +77,37 @@ public class LexScanner {
 					estado = 1;
 					term += currentChar;
 				}
-				else if (isSpace(currentChar) || isOperator(currentChar)){
-					estado = 2;
-					
+				else if (isSpace(currentChar) || isOperator(currentChar) || isEOF(currentChar)){
+					if (!isEOF(currentChar))
+						back();
+					token = new Token();
+					token.setType(Token.TK_IDENTIFIER);
+					token.setText(term);
+					return token;
 				}
 				else {
 					throw new LexException("Malformed Identifier - Identificador Malformado");
 				}
 				break;
-			case 2:
-				back();
-				token = new Token();
-				token.setType(Token.TK_IDENTIFIER);
-				token.setText(term);
-				return token;
-				
-			case 3:
-				if (isDigit(currentChar)) {
-					estado = 3;
+			case 2:											
+				if (isDigit(currentChar) || currentChar == '.') {
+					estado = 2;
 					term += currentChar;
 				}
-				else if (!isChar(currentChar)){
-					estado = 4;
+					
+				else if (!isChar(currentChar) || isEOF(currentChar)) {
+						if (!isEOF(currentChar))
+							back();
+						token = new Token();
+						token.setType(Token.TK_NUMBER);
+						token.setText(term);
+						return token;
 				}
 				else {
-					throw new LexException("Unrecognized Number - Número Não Reconhecido");
+						throw new LexException("Unrecognized Number");
 				}
 				break;
-			case 4:
+			/*case 4:
 				token = new Token();
 				token.setType(Token.TK_NUMBER);
 				token.setText(term);
@@ -107,11 +119,13 @@ public class LexScanner {
 				token = new Token();
 				token.setType(Token.TK_OPERATOR);
 				token.setText(term);
-				return token;	
+				return token;	*/
 			}
 		}
 	}
 	
+	
+
 	//Funções utiltarias
 	private boolean isDigit(char c) {
 		return c >= '0' && c <= '9';
@@ -122,7 +136,7 @@ public class LexScanner {
 	}
 	
 	private boolean isOperator(char c) {
-		return c =='>' || c == '<' || c == '=' || c == '!';
+		return c == '>' || c == '<' || c == '=' || c == '!' || c == '+' || c == '-' || c == '*' || c == '/' || c=='(' || c==')';
 	}
 	
 	private boolean isSpace(char c) {
@@ -130,12 +144,19 @@ public class LexScanner {
 	}
 	
 	private char nextChar() {
+		if (isEOF()) {
+			return '\0';
+		}
 		return content[posicao++];
 	}
 	//Função para verifiacar se chegou no final do arquivo
 	private boolean isEOF() {
-		return posicao == content.length;
+		return posicao >= content.length;
 	}
+	
+	private boolean isEOF(char c) {
+    	return c == '\0';
+    }
 	
 	///@SuppressWarnings("unused")
 	private void back() {
