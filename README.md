@@ -1,5 +1,4 @@
-# Compiladores-Implementacao-em-Java
-Compiladores Implementação em Java
+# Compiladores Implementacao em Java - Analisador Líxico
 
 ### Descrições dos Tokens
 
