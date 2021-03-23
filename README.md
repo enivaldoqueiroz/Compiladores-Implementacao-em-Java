@@ -1,7 +1,7 @@
 # Compiladores-Implementacao-em-Java
 Compiladores Implementação em Java
 
-'//Metodo principal da classe LexScanner
+	'//Metodo principal da classe LexScanner
 	public Token nextToken() {
 		char currentChar;
 		Token token;
