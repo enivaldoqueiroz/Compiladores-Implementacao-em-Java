@@ -1,7 +1,8 @@
 # Compiladores-Implementacao-em-Java
 Compiladores Implementação em Java
 
-	'//Metodo principal da classe LexScanner
+### Metodo principal da classe LexScanner. Implementação baseada na transição de estado
+
 	public Token nextToken() {
 		char currentChar;
 		Token token;
@@ -78,7 +79,7 @@ Compiladores Implementação em Java
 				else {
 						throw new LexException("Unrecognized Number");
 				}
-				break;'
+				break;
 
 ### Validando a sequência de tokens para o exemplo de expressão aritmética 42 + (675 * 31) - 20925
 ![](https://github.com/enivaldoqueiroz/Compiladores-Implementacao-em-Java/blob/main/src/Imagens/IMG001.png)
