@@ -80,6 +80,31 @@ Compiladores Implementação em Java
 						throw new LexException("Unrecognized Number");
 				}
 				break;
+				
+### Funções utiltarias da classe LexScanner para reconhecimento dos caracterias especiais 
+
+	private boolean isDigit(char c) {
+		return c >= '0' && c <= '9';
+	}
+	
+	private boolean isChar(char c) {
+		return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
+	}
+	
+	private boolean isOperator(char c) {
+		return c == '>' || c == '<' || c == '=' || c == '!' || c == '+' || c == '-' || c == '*' || c == '/' || c=='(' || c==')';
+	}
+	
+	private boolean isSpace(char c) {
+		return c == ' ' || c == '\t' || c == '\n' || c == '\r';
+	}
+	
+	private char nextChar() {
+		if (isEOF()) {
+			return '\0';
+		}
+		return content[posicao++];
+	}
 
 ### Validando a sequência de tokens para o exemplo de expressão aritmética 42 + (675 * 31) - 20925
 ![](https://github.com/enivaldoqueiroz/Compiladores-Implementacao-em-Java/blob/main/src/Imagens/IMG001.png)
