@@ -1,5 +1,8 @@
 # Compiladores Implementacao em Java - Analisador Líxico
 
+### Diagrama de transição do Automato Não Deterministico do Analizador Léxico
+![](https://github.com/enivaldoqueiroz/Compiladores-Implementacao-em-Java/blob/main/src/Imagens/IMG002.png)
+
 ### Descrições dos Tokens
 
 	IDENTIFICADORES
