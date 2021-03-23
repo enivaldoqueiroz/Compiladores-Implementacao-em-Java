@@ -1,6 +1,24 @@
 # Compiladores-Implementacao-em-Java
 Compiladores Implementação em Java
 
+### Descrições dos Tokens
+
+	IDENTIFICADORES
+	(a..z)(A...Z|0..9|a...z)*
+	NUMEROS
+	(0...9)+
+	PONTUACAO
+	;
+	OP_RELACIONAL
+	> | >= | < | == | !=
+	OP_ATRIBUICAO
+	=
+
+	Obs.:
+	a..z	-> Intervalo da letra 'a' ate a letra 'z'
+	*		-> 0 ou mais repetições
+	+		-> 1 ou mais repetições	
+
 ### Metodo principal da classe LexScanner. Implementação baseada na transição de estado
 
 	public Token nextToken() {
