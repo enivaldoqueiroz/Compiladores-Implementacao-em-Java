@@ -9,8 +9,8 @@
 	(a..z)(A...Z|0..9|a...z)*
 	NUMEROS
 	(0...9)+
-	PONTUACAO
-	;
+	PONTUACAO - COMENTARIO
+	@
 	OP_RELACIONAL
 	> | >= | < | == | !=
 	OP_ATRIBUICAO
