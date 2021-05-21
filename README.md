@@ -1,5 +1,61 @@
 # Compiladores Implementacao em Java - Analisador Léxico
 
+### GRAMÁTICA / REGRAS
+	Dada a gramática G
+
+	G = (Vn, Vt, P, S)
+
+	Vn = E, T, OP
+	Vt = id, num, + , - , * , /
+
+	1. E ->   E OP T | T
+	2. T ->  id | num
+	3. OP ->  + | - | * | /
+
+
+	* precisamos reescrever a regra 1, transformando-a em
+
+	1a.  E  ->  T E'
+	1b.  E' -> OP T E' | &
+	2.   T  -> id | num
+	3.   OP -> + | - | * | /
+
+### Funções recursivas da classe LexParser
+
+	public void E() {
+		T();
+		El();
+	}
+	
+	public void El() {
+		token = scanner.nextToken();
+		if (token != null) {
+			OP();
+			T();
+			El();
+			
+			/*if(token.getType() == Token.TK_OPERATOR) {
+				throw new LexSyntaxException("Operator Expected");
+			}*/
+		}
+	}
+	
+	public void T() {
+		token = scanner.nextToken();
+		if (token.getType() != Token.TK_IDENTIFIER && token.getType() != Token.TK_NUMBER) {
+			throw new LexSyntaxException("ID or NUMBER Expected!, found "+Token.TK_TEXT[token.getType()]+" ("+token.getText()+") at LINE "+token.getLine()+" and COLUMN "+token.getColumn());
+		}
+	}
+	
+	public void OP() {
+		if (token.getType() != Token.TK_OPERATOR) {
+			throw new LexSyntaxException("Operator expeted, found "+Token.TK_TEXT[token.getType()]+"("+token.getText()+") at LINE "+token.getLine()+" and COLUMN "+token.getColumn());
+		}
+	}
+	
+### Validando
+![](https://github.com/enivaldoqueiroz/Compiladores-Implementacao-em-Java/blob/main/src/Imagens/IMG003.png)
+
 ### Diagrama de transição do Automato Não Deterministico do Analizador Léxico
 ![](https://github.com/enivaldoqueiroz/Compiladores-Implementacao-em-Java/blob/main/src/Imagens/IMG002.png)
 
