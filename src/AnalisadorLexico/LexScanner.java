@@ -4,17 +4,20 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import br.com.professorisidro.compiler.exceptions.IsiLexicalException;
+
 
 public class LexScanner {
 	
 	private char[] 	content;
 	private int 	estado;
 	private int		posicao;
+	private int 	line;
+	private int 	column;
 	
 	public LexScanner(String filename) {
 		try {
-			
+			line = 1;
+			column = 0;
 			String txtConteudo;
 			txtConteudo = new String(Files.readAllBytes(Paths.get(filename)),StandardCharsets.UTF_8);
 			System.out.println("DEBUG ----------");
@@ -42,7 +45,7 @@ public class LexScanner {
 		estado = 0;
 		while (true) {
 			currentChar = nextChar();
-			
+			column++;
 			
 			switch(estado) {
 			case 0:
@@ -66,10 +69,12 @@ public class LexScanner {
 					token = new Token();
 					token.setType(Token.TK_OPERATOR);
 					token.setText(term);
+					token.setLine(line);
+					token.setColumn(column - term.length());
 					return token;
 				}
 				else {
-					throw new LexException("Unrecognized SYMBOL - SÍMBOLO não reconhecido");
+					throw new LexException("Unrecognized SYMBOL - SÃ�MBOLO nÃ£o reconhecido");
 				}
 				break;
 			case 1:
@@ -83,6 +88,8 @@ public class LexScanner {
 					token = new Token();
 					token.setType(Token.TK_IDENTIFIER);
 					token.setText(term);
+					token.setLine(line);
+					token.setColumn(column - term.length());
 					return token;
 				}
 				else {
@@ -101,6 +108,8 @@ public class LexScanner {
 						token = new Token();
 						token.setType(Token.TK_NUMBER);
 						token.setText(term);
+						token.setLine(line);
+						token.setColumn(column - term.length());
 						return token;
 				}
 				else {
@@ -126,7 +135,7 @@ public class LexScanner {
 	
 	
 
-	//Funções utiltarias
+	//FunÃ§Ãµes utiltarias
 	private boolean isDigit(char c) {
 		return c >= '0' && c <= '9';
 	}
@@ -136,10 +145,14 @@ public class LexScanner {
 	}
 	
 	private boolean isOperator(char c) {
-		return c == '>' || c == '<' || c == '=' || c == '!' || c == '+' || c == '-' || c == '*' || c == '/' || c=='(' || c==')' || c=='@''';
+		return c == '>' || c == '<' || c == '=' || c == '!' || c == '+' || c == '-' || c == '*' || c == '/' || c=='(' || c==')' || c=='@';
 	}
 	
 	private boolean isSpace(char c) {
+		if (c == '\n' || c== '\r') {
+			line++;
+			column = 0;
+		}
 		return c == ' ' || c == '\t' || c == '\n' || c == '\r';
 	}
 	
@@ -149,7 +162,7 @@ public class LexScanner {
 		}
 		return content[posicao++];
 	}
-	//Função para verifiacar se chegou no final do arquivo
+	//FunÃ§Ã£o para verifiacar se chegou no final do arquivo
 	private boolean isEOF() {
 		return posicao >= content.length;
 	}
