@@ -24,7 +24,7 @@
 
 	public void E() {
 		T();
-		El();
+		El(); // E linha
 	}
 	
 	public void El() {
